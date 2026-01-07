@@ -5,7 +5,7 @@ import SummaryDisplay from '../components/SummaryDisplay';
 import { Link } from 'react-router-dom';
 
 const fetchNotes = async (token) => {
-    const response = await fetch('http://localhost:8080/api/notes', {
+    const response = await fetch('https://api.ranjeetdev.online/api/notes', {
         headers: { 'Authorization': `Bearer ${token}` }
     });
     if (!response.ok) throw new Error('Failed to fetch notes');

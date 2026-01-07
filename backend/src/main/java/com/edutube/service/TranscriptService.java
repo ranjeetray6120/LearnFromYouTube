@@ -17,8 +17,22 @@ public class TranscriptService {
             throw new IllegalArgumentException("Invalid YouTube URL");
         }
 
+        // Extract script from JAR to temp file
+        java.io.File scriptFile = java.io.File.createTempFile("fetch_transcript", ".py");
+        try (java.io.InputStream is = getClass().getResourceAsStream("/fetch_transcript.py")) {
+            if (is == null) {
+                throw new java.io.FileNotFoundException("Python script not found in resources");
+            }
+            java.nio.file.Files.copy(is, scriptFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        // Determine python command (simple heuristic)
+        String pythonCmd = "python";
+        // On Linux/Mac often python3 is the command. You might make this configurable.
+        // For now keeping 'python' but be aware of environment differences.
+
         // Run python script
-        ProcessBuilder processBuilder = new ProcessBuilder("python", "src/main/resources/fetch_transcript.py", videoId);
+        ProcessBuilder processBuilder = new ProcessBuilder(pythonCmd, scriptFile.getAbsolutePath(), videoId);
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
 
@@ -30,6 +44,10 @@ public class TranscriptService {
         }
 
         int exitCode = process.waitFor();
+
+        // Cleanup temp file
+        scriptFile.delete();
+
         if (exitCode != 0) {
             throw new RuntimeException("Script failed: " + output.toString());
         }

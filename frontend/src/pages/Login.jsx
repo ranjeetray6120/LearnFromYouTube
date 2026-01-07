@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { Mail, Lock, LogIn, ArrowRight } from 'lucide-react';
 
 const loginUser = async (credentials) => {
-    const response = await fetch('http://localhost:8080/api/auth/login', {
+    const response = await fetch('https://api.ranjeetdev.online/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials),
@@ -116,7 +116,7 @@ export default function Login() {
                             <div style={{ flex: 1, height: '1px', background: 'var(--glass-border)' }}></div>
                         </div>
 
-                        <a href="http://localhost:8080/oauth2/authorization/google" style={{ textDecoration: 'none' }}>
+                        <a href="https://api.ranjeetdev.online/oauth2/authorization/google" style={{ textDecoration: 'none' }}>
                             <button className="glass-btn" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', background: 'white', color: '#333' }}>
                                 <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4" fillRule="evenodd"></path>
