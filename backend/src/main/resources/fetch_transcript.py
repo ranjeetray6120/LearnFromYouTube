@@ -5,7 +5,16 @@ from youtube_transcript_api import YouTubeTranscriptApi
 def get_transcript(video_id):
     try:
         # Get list of all available transcripts
-        transcript_list_obj = YouTubeTranscriptApi().list(video_id)
+        # Check if cookies.txt exists in the current directory or a specific location
+        cookies_file = "cookies.txt"
+        import os
+        if not os.path.exists(cookies_file):
+            cookies_file = "/app/cookies.txt" # Docker default path check
+        
+        if os.path.exists(cookies_file):
+            transcript_list_obj = YouTubeTranscriptApi.list_transcripts(video_id, cookies=cookies_file)
+        else:
+            transcript_list_obj = YouTubeTranscriptApi.list_transcripts(video_id)
         
         # Convert to list for manual iteration
         transcripts = list(transcript_list_obj)
