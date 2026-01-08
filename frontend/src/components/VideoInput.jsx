@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { BASE_API } from '../config';
 import { useMutation } from '@tanstack/react-query';
 
 const generateSummary = async (url) => {
-    const response = await fetch('https://api.ranjeetdev.online/api/youtube/process', {
+    const response = await fetch(`${BASE_API}/api/youtube/process`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url }),

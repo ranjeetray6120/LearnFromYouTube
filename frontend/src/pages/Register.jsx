@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { BASE_API } from '../config';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate, Link } from 'react-router-dom';
 import AnimatedBackground from '../components/AnimatedBackground';
@@ -6,7 +7,7 @@ import { motion } from 'framer-motion';
 import { User, Mail, Lock, ArrowRight } from 'lucide-react';
 
 const registerUser = async (userData) => {
-    const response = await fetch('https://api.ranjeetdev.online/api/auth/register', {
+    const response = await fetch(`${BASE_API}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),

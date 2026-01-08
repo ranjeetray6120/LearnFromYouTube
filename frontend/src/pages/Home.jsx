@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { BASE_API } from '../config';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import VideoInput from '../components/VideoInput';
@@ -9,7 +10,7 @@ import { motion } from 'framer-motion';
 import { LogOut, LogIn, UserPlus, FileText, Presentation } from 'lucide-react';
 
 const saveNote = async ({ noteData, token, url }) => {
-    const response = await fetch('https://api.ranjeetdev.online/api/notes', {
+    const response = await fetch(`${BASE_API}/api/notes`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ export default function Home() {
         };
 
         try {
-            const response = await fetch(`https://api.ranjeetdev.online/api/export/${type}`, {
+            const response = await fetch(`${BASE_API}/api/export/${type}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

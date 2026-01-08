@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
+import { BASE_API } from '../config';
 import { useAuth } from '../context/AuthContext';
 import { useQuery } from '@tanstack/react-query';
 import SummaryDisplay from '../components/SummaryDisplay';
 import { Link } from 'react-router-dom';
 
 const fetchNotes = async (token) => {
-    const response = await fetch('https://api.ranjeetdev.online/api/notes', {
+    const response = await fetch(`${BASE_API}/api/notes`, {
         headers: { 'Authorization': `Bearer ${token}` }
     });
     if (!response.ok) throw new Error('Failed to fetch notes');
