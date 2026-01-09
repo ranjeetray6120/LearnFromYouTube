@@ -1,7 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FileText, List, AlignLeft } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+
+const Typewriter = ({ text, delay = 15 }) => {
+    const [currentText, setCurrentText] = useState('');
+
+    useEffect(() => {
+        if (!text) return;
+        let i = 0;
+        const timer = setInterval(() => {
+            setCurrentText(text.slice(0, i + 1));
+            i++;
+            if (i >= text.length) clearInterval(timer);
+        }, delay);
+        return () => clearInterval(timer);
+    }, [text, delay]);
+
+    return <span>{currentText}</span>;
+};
 
 export default function SummaryDisplay({ data }) {
     const [activeTab, setActiveTab] = useState('summary');
@@ -150,7 +167,9 @@ export default function SummaryDisplay({ data }) {
                         {activeTab === 'summary' && (
                             <div>
                                 <h3 style={{ marginTop: 0, marginBottom: '20px', color: '#fff' }}>Quick Summary</h3>
-                                <p style={{ lineHeight: '1.8', fontSize: '1.1rem', color: '#e2e8f0' }}>{summary}</p>
+                                <p style={{ lineHeight: '1.8', fontSize: '1.1rem', color: '#e2e8f0' }}>
+                                    <Typewriter text={summary} delay={10} />
+                                </p>
                             </div>
                         )}
 
@@ -158,11 +177,17 @@ export default function SummaryDisplay({ data }) {
                             <div>
                                 <h3 style={{ marginTop: 0, marginBottom: '20px', color: '#fff' }}>Topics Covered</h3>
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                                    {Array.isArray(topics) ? topics.map((topic, i) => (
-                                        <span key={i} className="glass-panel" style={{ padding: '8px 16px', fontSize: '0.9rem', borderRadius: '20px', background: 'rgba(255,255,255,0.05)' }}>
-                                            # {topic}
-                                        </span>
-                                    )) : <p>{JSON.stringify(topics)}</p>}
+                                    {Array.isArray(topics) ? topics.map((topic, i) => {
+                                        let topicText = topic;
+                                        if (typeof topic === 'object' && topic !== null) {
+                                            topicText = topic.topic || topic.content || JSON.stringify(topic);
+                                        }
+                                        return (
+                                            <span key={i} className="glass-panel" style={{ padding: '8px 16px', fontSize: '0.9rem', borderRadius: '20px', background: 'rgba(255,255,255,0.05)' }}>
+                                                # {topicText}
+                                            </span>
+                                        );
+                                    }) : <p>{JSON.stringify(topics)}</p>}
                                 </div>
                             </div>
                         )}

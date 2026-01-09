@@ -11,11 +11,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class TranscriptService {
 
-    public String fetchTranscript(String videoUrl) throws Exception {
+    public String fetchTranscript(String videoUrl, String language) throws Exception {
         String videoId = extractVideoId(videoUrl);
         if (videoId == null) {
             throw new IllegalArgumentException("Invalid YouTube URL");
         }
+
+        // Default to English if language is not provided
+        String targetLang = (language == null || language.isEmpty()) ? "en" : language;
 
         // Extract script from JAR to temp file
         java.io.File scriptFile = java.io.File.createTempFile("fetch_transcript", ".py");
@@ -28,11 +31,10 @@ public class TranscriptService {
 
         // Determine python command (simple heuristic)
         String pythonCmd = "python";
-        // On Linux/Mac often python3 is the command. You might make this configurable.
-        // For now keeping 'python' but be aware of environment differences.
 
-        // Run python script
-        ProcessBuilder processBuilder = new ProcessBuilder(pythonCmd, scriptFile.getAbsolutePath(), videoId);
+        // Run python script with target language
+        ProcessBuilder processBuilder = new ProcessBuilder(pythonCmd, scriptFile.getAbsolutePath(), videoId,
+                targetLang);
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
 

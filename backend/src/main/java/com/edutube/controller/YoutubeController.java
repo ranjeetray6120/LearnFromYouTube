@@ -21,13 +21,15 @@ public class YoutubeController {
     @PostMapping("/process")
     public ResponseEntity<?> processVideo(@RequestBody VideoRequest request) {
         try {
-            // 1. Get Transcript
-            String transcript = transcriptService.fetchTranscript(request.getUrl());
+            // 1. Get Transcript (with optional language)
+            String transcript = transcriptService.fetchTranscript(request.getUrl(), request.getLanguage());
 
             // 2. Generate Summary
             String summaryJson = aiService.generateSummary(transcript);
 
-            return ResponseEntity.ok(summaryJson); // Returns the JSON string specific by AI
+            return ResponseEntity.ok()
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(summaryJson);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
@@ -36,5 +38,6 @@ public class YoutubeController {
     @Data
     public static class VideoRequest {
         private String url;
+        private String language; // "en", "hi", "es", etc.
     }
 }
